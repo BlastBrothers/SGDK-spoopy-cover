@@ -6,16 +6,11 @@
 
 #include <genesis.h>
 #include "maps.h"
-#include "sprites.h"
 
 #define MAP_WIDTH               1280
 #define MAP_HEIGHT              592
 #define SCREEN_WIDTH            320
 #define SCREEN_HEIGHT           224
-
-#define PLAYER_SPRITE_WIDTH     64
-#define PLAYER_SPRITE_HEIGHT    56
-#define PLAYER_MOVE_SPEED       2
 
 // Background scroll scale for far/background layer (shift right)
 #define BG_SCROLL_SHIFT         3
@@ -26,14 +21,7 @@ typedef struct
     Vect2D_s16 prevPos;
 } Positions;
 
-typedef struct
-{
-    Positions;
-    Sprite *sprite;
-} Player;
-
 Positions camera;
-Player player;
 
 // Declare foreground and background map's pointers
 Map *fgMap;
@@ -41,7 +29,7 @@ Map *bgMap;
 
 // Forward declarations
 _Noreturn void MainLoop();
-void GameInit();
+void Init();
 void CameraUpdate();
 void InputUpdate();
 bool PlayerPositionUpdate();
@@ -52,28 +40,19 @@ int main(bool hardReset)
     if (!hardReset)
         SYS_hardReset();
     
-    GameInit();
+    Init();
     MainLoop();
     return 0; // unreachable, MainLoop is _Noreturn but keep signature
 }
 
-void GameInit()
+void Init()
 {
     VDP_setScreenWidth320();
 
     // Set the maximum number of tiles for the sprite engine.
-    // I set it to 40 because these beautiful background tilesets are not optimized for Genesis and consume tiles,
-    // while the sprite in the example is only one
-    // In a real project, you should optimize the tileset by reducing the number of unique tiles
+    // I set it to 40 because these beautiful background tilesets are not optimized for Genesis and consume tiles
     SPR_initEx(40);
-    
-    // Place player at screen center minus sprite offsets
-    player.pos.x = SCREEN_WIDTH / 2 - PLAYER_SPRITE_WIDTH / 2;
-    player.pos.y = SCREEN_HEIGHT / 2 - PLAYER_SPRITE_HEIGHT / 2;
-    
-    // Create player sprite with proper palette and attributes
-    player.sprite = SPR_addSprite(&spr_def_player, player.pos.x, player.pos.y, TILE_ATTR(PAL2, FALSE, FALSE, TRUE));
-    
+
     // Set the initial VRAM tile index from which we will load the first tileset
     u16 nextToFillTileIndex = TILE_USER_INDEX;
     
@@ -91,13 +70,10 @@ void GameInit()
     // Initial camera positioning
     CameraUpdate();
     
-    // Set palettes for foreground, background and player sprite palette
+    // Set palettes for foreground, background
     PAL_setPalette(PAL0, fg_palette.data, DMA);
     PAL_setPalette(PAL1, bg_palette.data, DMA);
-    PAL_setPalette(PAL2, spr_def_player.palette->data, DMA);
     
-    // Update sprites and process VBlank
-    SPR_update();
     SYS_doVBlankProcess();
 }
 
@@ -105,57 +81,19 @@ _Noreturn void MainLoop()
 {
     while (TRUE)
     {
-        InputUpdate();              // Process player input
-        if (PlayerPositionUpdate()) // Update player position
-            CameraUpdate();         // Update camera position
-        SPR_update();               // Update sprites
+        CameraUpdate();         // Update camera position
         SYS_doVBlankProcess();      // Wait for VBlank processes
     }
 }
 
-bool PlayerPositionUpdate()
-{
-    // If player didn't move, no need to update
-    if (player.pos.x == player.prevPos.x && player.pos.y == player.prevPos.y)
-        return FALSE;
-    
-    SPR_setPosition(player.sprite, player.pos.x - camera.pos.x, player.pos.y - camera.pos.y);
-    
-    return TRUE;
-}
 
 void CameraUpdate()
 {
     // Calculate camera position centered on player and clamp to map bounds
-    camera.pos.x = clamp(player.pos.x - SCREEN_WIDTH / 2, 0, MAP_WIDTH - SCREEN_WIDTH);
-    camera.pos.y = clamp(player.pos.y - SCREEN_HEIGHT / 2, 0, MAP_HEIGHT - SCREEN_HEIGHT);
+    camera.pos.x = 0;
+    camera.pos.y = 0;
     
     // Scroll foreground directly and background scaled down (parallax)
     MAP_scrollTo(fgMap, camera.pos.x, camera.pos.y);
     MAP_scrollTo(bgMap, camera.pos.x >> BG_SCROLL_SHIFT, camera.pos.y >> BG_SCROLL_SHIFT);
-}
-
-void InputUpdate()
-{
-    u16 value = JOY_readJoypad(JOY_1);
-    
-    // remember previous player position for movement and rendering logic
-    player.prevPos = player.pos;
-    
-    // Move player position using defined speed constant and update sprite flip
-    if (value & BUTTON_RIGHT)
-    {
-        player.pos.x += PLAYER_MOVE_SPEED;
-        SPR_setHFlip(player.sprite, TRUE); // Flip sprite to face right
-    }
-    else if (value & BUTTON_LEFT)
-    {
-        player.pos.x -= PLAYER_MOVE_SPEED;
-        SPR_setHFlip(player.sprite, FALSE); // Reset flip to face left
-    }
-    
-    if (value & BUTTON_UP)
-        player.pos.y -= PLAYER_MOVE_SPEED;
-    else if (value & BUTTON_DOWN)
-        player.pos.y += PLAYER_MOVE_SPEED;
 }
