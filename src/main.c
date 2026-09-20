@@ -7,8 +7,6 @@
 #include <genesis.h>
 #include "maps.h"
 
-#define MAP_WIDTH               1280
-#define MAP_HEIGHT              592
 #define SCREEN_WIDTH            320
 #define SCREEN_HEIGHT           224
 
