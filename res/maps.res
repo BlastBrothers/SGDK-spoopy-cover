@@ -4,7 +4,7 @@
 
 # -------------------------- Foreground tileset loading -----------------------------------------
 #          name          file                        compression  opt
-TILESET    fg_tileset    "levels/tileset_fg.png"     FAST		  ALL
+TILESET    fg_tileset    "levels/tileset_fg.tsx"     FAST		  ALL
 # note: we can also use .tsx file instead of the .png file
 
 # -------------------------- Foreground map loading ---------------------------------------------
@@ -19,7 +19,7 @@ PALETTE    fg_palette    "levels/tileset_fg.png"
 
 # -------------------------- Background tileset loading -----------------------------------------
 #          name          file                        compression  opt
-TILESET    bg_tileset    "levels/tileset_bg.png"     FAST		  ALL
+TILESET    bg_tileset    "levels/tileset_bg.tsx"     FAST		  ALL
 
 # -------------------------- Background map loading ---------------------------------------------
 #          name          tmx_file                    layer_id     ts_compression  map_compression
