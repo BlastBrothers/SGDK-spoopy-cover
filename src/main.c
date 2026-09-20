@@ -20,8 +20,6 @@ Map *bgMap;
 _Noreturn void MainLoop();
 void Init();
 void CameraUpdate();
-void InputUpdate();
-bool PlayerPositionUpdate();
 
 int main(bool hardReset)
 {
@@ -39,7 +37,6 @@ void Init()
     VDP_setScreenWidth320();
 
     // Set the maximum number of tiles for the sprite engine.
-    // I set it to 40 because these beautiful background tilesets are not optimized for Genesis and consume tiles
     SPR_initEx(40);
 
     // Set the initial VRAM tile index from which we will load the first tileset
@@ -58,13 +55,13 @@ void Init()
     
     // Initial camera positioning
     CameraUpdate();
+
+    //reset FG scroll. IDK if this is required, but I'm putting it in.
+    MAP_scrollTo(fgMap, 0, 0);
     
     // Set palettes for foreground, background
     PAL_setPalette(PAL0, fg_palette.data, DMA);
     PAL_setPalette(PAL1, bg_palette.data, DMA);
-    
-    //reset FG scroll. IDK if this is required, but I'm putting it in.
-    MAP_scrollTo(fgMap, 0, 0);
 
     SYS_doVBlankProcess();
 }
