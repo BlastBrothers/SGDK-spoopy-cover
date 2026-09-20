@@ -12,16 +12,7 @@
 #define SCREEN_WIDTH            320
 #define SCREEN_HEIGHT           224
 
-// Background scroll scale for far/background layer (shift right)
-#define BG_SCROLL_SHIFT         3
-
-typedef struct
-{
-    Vect2D_s16 pos;
-    Vect2D_s16 prevPos;
-} Positions;
-
-Positions camera;
+s16 bg_xpos;
 
 // Declare foreground and background map's pointers
 Map *fgMap;
@@ -74,6 +65,9 @@ void Init()
     PAL_setPalette(PAL0, fg_palette.data, DMA);
     PAL_setPalette(PAL1, bg_palette.data, DMA);
     
+    //reset FG scroll. IDK if this is required, but I'm putting it in.
+    MAP_scrollTo(fgMap, 0, 0);
+
     SYS_doVBlankProcess();
 }
 
@@ -89,11 +83,9 @@ _Noreturn void MainLoop()
 
 void CameraUpdate()
 {
-    // Calculate camera position centered on player and clamp to map bounds
-    camera.pos.x = 0;
-    camera.pos.y = 0;
+    // Calculate camera position
+    bg_xpos += 1;
     
-    // Scroll foreground directly and background scaled down (parallax)
-    MAP_scrollTo(fgMap, camera.pos.x, camera.pos.y);
-    MAP_scrollTo(bgMap, camera.pos.x >> BG_SCROLL_SHIFT, camera.pos.y >> BG_SCROLL_SHIFT);
+    // Scroll BG
+    MAP_scrollTo(bgMap, bg_xpos, 0);
 }
