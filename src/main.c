@@ -1,18 +1,7 @@
 // *****************************************************************************
-//  TMX Map Sample
-//
-// This sample demonstrates loading Tiled TMX map and one method of setting
-// tile priority through priority layers on both BG planes.
-//
-// Notes:
-//   - Separate tileset for priority layers is not mandatory, and you can use any tile from any tileset,
-//     but it is more convenient to use monotonous colored tiles that are individual for each layer.
-//   - For simplicity, the example does not use fixed point types for player coordinates.
-//
-//  Controls: DPAD to move the player and observe camera scrolling.
-//
-//  written by werton playskin on 09/2025
-//  graphics by Luis Zuno aka Ansimuz ansimuz.itch.io (CC0 license)
+//  Adapted from "TMX Map Sample" by werton playskin
+//  Made for battleofthebits.com's Halloween sgen compo, as a cover art submission
+//  Sept 2026
 // *****************************************************************************
 
 #include <genesis.h>
