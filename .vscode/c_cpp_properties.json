@@ -3,12 +3,14 @@
         {
             "name": "sgdk",
             "includePath": [
-		        "${workspaceFolder}/inc", 
-		        "${workspaceFolder}/res"
-		    ],
-            "browse" : {
-                "limitSymbolsToIncludedHeaders" : true,
-                "databaseFilename" : ""
+                "${workspaceFolder}/inc",
+                "${workspaceFolder}/res",
+                "/home/bb/main/dev/SGDK/inc/**",
+                "/home/bb/main/dev/SGDK/res/**"
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
             }
         }
     ],
