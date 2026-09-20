@@ -28,6 +28,6 @@ const ROMHeader rom_header = {
     0x00200000,
     0x0020FFFF,
     "            ",
-    "BOTB SPOOPY IX ARTDEMO 2026                     ",
+    "BOTB SPOOPY IX ARTDEMO 2026             ",
     "JUE             "
 };
