@@ -42,15 +42,9 @@ void Init()
     // Set the initial VRAM tile index from which we will load the first tileset
     u16 nextToFillTileIndex = TILE_USER_INDEX;
     
-    // Load tileset and create foreground map
+    // Load tileset and create tilemaps
     VDP_loadTileSet(&fg_tileset, nextToFillTileIndex, DMA);
     fgMap = MAP_create(&fg_map_def, BG_A, TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, nextToFillTileIndex));
-    
-    // Update tile index for next tileset
-    nextToFillTileIndex += fg_tileset.numTile;
-    
-    // Load background tileset and create background map
-    VDP_loadTileSet(&bg_tileset, nextToFillTileIndex, DMA);
     bgMap = MAP_create(&bg_map_def, BG_B, TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, nextToFillTileIndex));
     
     // Initial camera positioning
@@ -59,9 +53,8 @@ void Init()
     //reset FG scroll. IDK if this is required, but I'm putting it in.
     MAP_scrollTo(fgMap, 0, 0);
     
-    // Set palettes for foreground, background
+    // Set palette for foreground
     PAL_setPalette(PAL0, fg_palette.data, DMA);
-    PAL_setPalette(PAL1, bg_palette.data, DMA);
 
     SYS_doVBlankProcess();
 }
