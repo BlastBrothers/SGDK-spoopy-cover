@@ -10,13 +10,15 @@
 #define SCREEN_WIDTH            320
 #define SCREEN_HEIGHT           224
 #define CLOUD_SCROLL_NUM_TILES  13
+#define TITLE_SCROLL_NUM_TILES  8
+#define TITLE_SCROLL_SPEED      3
 
 s16 bg_xpos = 0;
 s16 cloudScroll[CLOUD_SCROLL_NUM_TILES]; //holds per-tile hscroll values for BG clouds
+s16 titleScroll[CLOUD_SCROLL_NUM_TILES] = {0, 0, 1, 1, 0, 0, -1, -1}; //holds per-tile hscroll values for FG title
 
 // Declare foreground and background map's pointers
 Map *fgMap;
-TileMap *bgMap;
 
 // Forward declarations
 _Noreturn void MainLoop();
@@ -62,8 +64,15 @@ void Init()
 
 _Noreturn void MainLoop()
 {
+    s16 scrollCountdown = TITLE_SCROLL_SPEED;
     while (TRUE)
     {
+        scrollCountdown -= 1;
+
+        if (scrollCountdown == -1) {
+            scrollCountdown = TITLE_SCROLL_SPEED;
+        }
+
         //Calculate cloud linescroll
         bg_xpos -= 1; //starting value
         cloudScroll[0] = bg_xpos << 1;
@@ -80,8 +89,23 @@ _Noreturn void MainLoop()
         cloudScroll[11] = 0;
         cloudScroll[12] = 0;
 
+        //calculate title linescroll
+        if (scrollCountdown == TITLE_SCROLL_SPEED) {
+            s16 temp = titleScroll[0];
+            titleScroll[0] = titleScroll[1];
+            titleScroll[1] = titleScroll[2];
+            titleScroll[2] = titleScroll[3];
+            titleScroll[3] = titleScroll[4];
+            titleScroll[4] = titleScroll[5];
+            titleScroll[5] = titleScroll[6];
+            titleScroll[6] = titleScroll[7];
+            titleScroll[7] = temp;
+        }
+        
+
         // update line scroll
         VDP_setHorizontalScrollTile(BG_B, 0, cloudScroll, CLOUD_SCROLL_NUM_TILES, DMA_QUEUE);
+        VDP_setHorizontalScrollTile(BG_A, 0, titleScroll, TITLE_SCROLL_NUM_TILES, DMA_QUEUE);
 
         SYS_doVBlankProcess();      // Wait for VBlank processes
     }
