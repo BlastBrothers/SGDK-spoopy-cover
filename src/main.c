@@ -65,7 +65,7 @@ _Noreturn void MainLoop()
     while (TRUE)
     {
         //Calculate cloud linescroll
-        bg_xpos += 1; //starting value
+        bg_xpos -= 1; //starting value
         cloudScroll[0] = bg_xpos << 1;
         cloudScroll[1] = bg_xpos << 1;
         cloudScroll[2] = bg_xpos << 1;
