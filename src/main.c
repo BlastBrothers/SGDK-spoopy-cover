@@ -12,7 +12,7 @@
 #define CLOUD_SCROLL_NUM_TILES  13
 
 s16 bg_xpos = 0;
-s16 cloudScroll[CLOUD_SCROLL_NUM_TILES];
+s16 cloudScroll[CLOUD_SCROLL_NUM_TILES]; //holds per-tile hscroll values for BG clouds
 
 // Declare foreground and background map's pointers
 Map *fgMap;
@@ -51,7 +51,7 @@ void Init()
     fgMap = MAP_create(&fg_map_def, BG_A, TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, nextTileIndex));
     VDP_setTileMapEx(BG_B, &bg_tilemap, TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, nextTileIndex), 0, 0, 0, 0, 32, 28, DMA_QUEUE_COPY);
 
-    //reset scroll. As a side effect this loads in the initial tilemap data.
+    //reset scroll. As a side effect this loads in the initial map data.
     MAP_scrollTo(fgMap, 0, 0);
 
     // Set palette for foreground
@@ -64,21 +64,20 @@ _Noreturn void MainLoop()
 {
     while (TRUE)
     {
-
         //Calculate cloud linescroll
         bg_xpos += 1; //starting value
-        cloudScroll[0] = bg_xpos;
-        cloudScroll[1] = bg_xpos;
-        cloudScroll[2] = bg_xpos;
-        cloudScroll[3] = bg_xpos;
-        cloudScroll[4] = bg_xpos;
+        cloudScroll[0] = bg_xpos << 1;
+        cloudScroll[1] = bg_xpos << 1;
+        cloudScroll[2] = bg_xpos << 1;
+        cloudScroll[3] = bg_xpos << 1;
+        cloudScroll[4] = bg_xpos << 1;
         cloudScroll[5] = bg_xpos;
-        cloudScroll[6] = bg_xpos >> 1;
-        cloudScroll[7] = bg_xpos >> 1;
-        cloudScroll[8] = bg_xpos >> 1;
-        cloudScroll[9] = bg_xpos >> 2;
-        cloudScroll[10] = bg_xpos >> 2;
-        cloudScroll[11] = bg_xpos >> 2;
+        cloudScroll[6] = bg_xpos;
+        cloudScroll[7] = bg_xpos;
+        cloudScroll[8] = bg_xpos;
+        cloudScroll[9] = bg_xpos >> 1;
+        cloudScroll[10] = bg_xpos >> 1;
+        cloudScroll[11] = 0;
         cloudScroll[12] = 0;
 
         // update line scroll
