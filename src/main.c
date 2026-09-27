@@ -16,7 +16,7 @@ s16 cloudScroll[CLOUD_SCROLL_NUM_TILES];
 
 // Declare foreground and background map's pointers
 Map *fgMap;
-Map *bgMap;
+TileMap *bgMap;
 
 // Forward declarations
 _Noreturn void MainLoop();
@@ -36,6 +36,7 @@ int main(bool hardReset)
 
 void Init()
 {
+    VDP_setPlaneSize(32, 32, TRUE);
     VDP_setScreenWidth320();
     VDP_setScrollingMode(HSCROLL_TILE, VSCROLL_PLANE);
 
@@ -48,11 +49,10 @@ void Init()
     // Load tileset and create tilemaps
     VDP_loadTileSet(&fg_tileset, nextToFillTileIndex, DMA);
     fgMap = MAP_create(&fg_map_def, BG_A, TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, nextToFillTileIndex));
-    bgMap = MAP_create(&bg_map_def, BG_B, TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, nextToFillTileIndex));
+    VDP_setTileMapEx(BG_B, &bg_tilemap, TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, nextToFillTileIndex), 0, 0, 0, 0, 32, 28, DMA_QUEUE_COPY);
 
     //reset scroll. As a side effect this loads in the initial tilemap data.
     MAP_scrollTo(fgMap, 0, 0);
-    MAP_scrollTo(bgMap, 0, 0);
 
     // Set palette for foreground
     PAL_setPalette(PAL0, fg_palette.data, DMA);
