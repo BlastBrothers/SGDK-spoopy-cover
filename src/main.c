@@ -17,7 +17,7 @@
 
 s16 bg_xpos = 0;
 s16 cloudScroll[CLOUD_SCROLL_NUM_TILES]; //holds per-tile hscroll values for BG clouds
-s16 titleScroll[CLOUD_SCROLL_NUM_TILES] = {0, 0, 1, 1, 0, 0, -1, -1}; //holds per-tile hscroll values for FG title
+s16 titleScroll[CLOUD_SCROLL_NUM_TILES] = {1, 1, 1, 0, -1, -1, -1, 0}; //holds per-tile hscroll values for FG title
 
 // Declare foreground and background map's pointers
 Map *fgMap;
@@ -25,7 +25,6 @@ Map *fgMap;
 // Forward declarations
 _Noreturn void MainLoop();
 void Init();
-void CameraUpdate();
 
 int main(bool hardReset)
 {
