@@ -7,8 +7,10 @@
 #include <genesis.h>
 #include "maps.h"
 
-#define SCREEN_WIDTH            320
-#define SCREEN_HEIGHT           224
+#define SCREEN_WIDTH_PIX        320
+#define SCREEN_HEIGHT_PIX       224
+#define SCREEN_WIDTH_TILES      64
+#define SCREEN_HEIGHT_TILES     28
 #define CLOUD_SCROLL_NUM_TILES  13
 #define TITLE_SCROLL_NUM_TILES  8
 #define TITLE_SCROLL_SPEED      3
@@ -38,7 +40,7 @@ int main(bool hardReset)
 
 void Init()
 {
-    VDP_setPlaneSize(32, 32, TRUE);
+    VDP_setPlaneSize(SCREEN_WIDTH_TILES, SCREEN_HEIGHT_TILES, TRUE);
     VDP_setScreenWidth320();
     VDP_setScrollingMode(HSCROLL_TILE, VSCROLL_PLANE);
 
@@ -51,7 +53,8 @@ void Init()
     // Load tileset and create tilemaps
     VDP_loadTileSet(&fg_tileset, nextTileIndex, DMA);
     fgMap = MAP_create(&fg_map_def, BG_A, TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, nextTileIndex));
-    VDP_setTileMapEx(BG_B, &bg_tilemap, TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, nextTileIndex), 0, 0, 0, 0, 32, 28, DMA_QUEUE_COPY);
+    VDP_setTileMapEx(BG_B, &bg_tilemap, TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, nextTileIndex), 0, 0, 0, 0, 
+    SCREEN_WIDTH_TILES, SCREEN_HEIGHT_TILES, DMA_QUEUE_COPY);
 
     //reset scroll. As a side effect this loads in the initial map data.
     MAP_scrollTo(fgMap, 0, 0);
