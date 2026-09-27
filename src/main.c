@@ -44,12 +44,12 @@ void Init()
     SPR_initEx(40);
 
     // Set the initial VRAM tile index from which we will load the first tileset
-    u16 nextToFillTileIndex = TILE_USER_INDEX;
+    u16 nextTileIndex = TILE_USER_INDEX;
     
     // Load tileset and create tilemaps
-    VDP_loadTileSet(&fg_tileset, nextToFillTileIndex, DMA);
-    fgMap = MAP_create(&fg_map_def, BG_A, TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, nextToFillTileIndex));
-    VDP_setTileMapEx(BG_B, &bg_tilemap, TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, nextToFillTileIndex), 0, 0, 0, 0, 32, 28, DMA_QUEUE_COPY);
+    VDP_loadTileSet(&fg_tileset, nextTileIndex, DMA);
+    fgMap = MAP_create(&fg_map_def, BG_A, TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, nextTileIndex));
+    VDP_setTileMapEx(BG_B, &bg_tilemap, TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, nextTileIndex), 0, 0, 0, 0, 32, 28, DMA_QUEUE_COPY);
 
     //reset scroll. As a side effect this loads in the initial tilemap data.
     MAP_scrollTo(fgMap, 0, 0);
