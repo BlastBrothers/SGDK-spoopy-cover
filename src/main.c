@@ -9,8 +9,10 @@
 
 #define SCREEN_WIDTH            320
 #define SCREEN_HEIGHT           224
+#define CLOUD_SCROLL_NUM_TILES  13
 
-s16 bg_xpos;
+s16 bg_xpos = 0;
+s16 cloudScroll[CLOUD_SCROLL_NUM_TILES];
 
 // Declare foreground and background map's pointers
 Map *fgMap;
@@ -35,6 +37,7 @@ int main(bool hardReset)
 void Init()
 {
     VDP_setScreenWidth320();
+    VDP_setScrollingMode(HSCROLL_TILE, VSCROLL_PLANE);
 
     // Set the maximum number of tiles for the sprite engine.
     SPR_initEx(40);
@@ -45,14 +48,12 @@ void Init()
     // Load tileset and create tilemaps
     VDP_loadTileSet(&fg_tileset, nextToFillTileIndex, DMA);
     fgMap = MAP_create(&fg_map_def, BG_A, TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, nextToFillTileIndex));
-    bgMap = MAP_create(&bg_map_def, BG_B, TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, nextToFillTileIndex));
-    
-    // Initial camera positioning
-    CameraUpdate();
+    bgMap = MAP_create(&bg_map_def, BG_B, TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, nextToFillTileIndex));
 
-    //reset FG scroll. IDK if this is required, but I'm putting it in.
+    //reset scroll. As a side effect this loads in the initial tilemap data.
     MAP_scrollTo(fgMap, 0, 0);
-    
+    MAP_scrollTo(bgMap, 0, 0);
+
     // Set palette for foreground
     PAL_setPalette(PAL0, fg_palette.data, DMA);
 
@@ -63,17 +64,26 @@ _Noreturn void MainLoop()
 {
     while (TRUE)
     {
-        CameraUpdate();         // Update camera position
+
+        //Calculate cloud linescroll
+        bg_xpos += 1; //starting value
+        cloudScroll[0] = bg_xpos;
+        cloudScroll[1] = bg_xpos;
+        cloudScroll[2] = bg_xpos;
+        cloudScroll[3] = bg_xpos;
+        cloudScroll[4] = bg_xpos;
+        cloudScroll[5] = bg_xpos;
+        cloudScroll[6] = bg_xpos >> 1;
+        cloudScroll[7] = bg_xpos >> 1;
+        cloudScroll[8] = bg_xpos >> 1;
+        cloudScroll[9] = bg_xpos >> 2;
+        cloudScroll[10] = bg_xpos >> 2;
+        cloudScroll[11] = bg_xpos >> 2;
+        cloudScroll[12] = 0;
+
+        // update line scroll
+        VDP_setHorizontalScrollTile(BG_B, 0, cloudScroll, CLOUD_SCROLL_NUM_TILES, DMA_QUEUE);
+
         SYS_doVBlankProcess();      // Wait for VBlank processes
     }
-}
-
-
-void CameraUpdate()
-{
-    // Calculate camera position
-    bg_xpos += 1;
-    
-    // Scroll BG
-    MAP_scrollTo(bgMap, bg_xpos, 0);
 }
