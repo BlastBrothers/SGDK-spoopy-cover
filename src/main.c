@@ -85,7 +85,7 @@ _Noreturn void MainLoop()
         cloudScroll[5] = bg_xpos;
         cloudScroll[6] = bg_xpos;
         cloudScroll[7] = bg_xpos;
-        cloudScroll[8] = bg_xpos;
+        cloudScroll[8] = bg_xpos >> 1;
         cloudScroll[9] = bg_xpos >> 1;
         cloudScroll[10] = bg_xpos >> 1;
         cloudScroll[11] = 0;
