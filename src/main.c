@@ -17,7 +17,9 @@
 
 s16 bg_xpos = 0;
 s16 cloudScroll[CLOUD_SCROLL_NUM_TILES]; //holds per-tile hscroll values for BG clouds
-const s16 titleScrollInitial[8] = {1, 1, 1, 0, -1, -1, -1, 0};
+//Only push right, so the wavy building on plane A doesn't pop in front of the static building on the window layer
+//This would be un-noticeable, but the gap between the title and the building is only 8px, so either part of the title gets cut off, or part of the building scrolls.
+const s16 titleScrollInitial[8] = {0, 0, 0, 1, 2, 2, 2, 1}; 
 s16 titleScroll[TITLE_SCROLL_NUM_TILES] = {}; //holds per-tile hscroll values for FG title
 
 
@@ -60,10 +62,13 @@ void Init()
     //reset scroll. As a side effect this loads in the initial map data.
     MAP_scrollTo(fgMap, 0, 0);
 
+    //set up window layer as a copy of Plane A, set to fill the right of screen.
+    //This lets the title have linescroll while the building remains stationary
+    VDP_setWindowAddress(VDP_getPlaneAddress(BG_A, 0, 0));
+    VDP_setWindowOnRight(10);
+
     // Set palette for foreground
     PAL_setPalette(PAL0, fg_palette.data, DMA);
-
-    SYS_doVBlankProcess();
 
     //prep title linescroll
     titleScroll[0] = titleScrollInitial[1];
@@ -75,6 +80,8 @@ void Init()
     titleScroll[6] = titleScrollInitial[7];
     titleScroll[7] = titleScrollInitial[8];
     titleScroll[8] = titleScrollInitial[0];
+
+    SYS_doVBlankProcess();
 }
 
 _Noreturn void MainLoop()
