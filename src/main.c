@@ -65,7 +65,7 @@ void Init()
     //set up window layer as a copy of Plane A, set to fill the right of screen.
     //This lets the title have linescroll while the building remains stationary
     VDP_setWindowAddress(VDP_getPlaneAddress(BG_A, 0, 0));
-    VDP_setWindowOnRight(10);
+    VDP_setWindowOnRight(9);
 
     // Set palette for foreground
     PAL_setPalette(PAL0, fg_palette.data, DMA);
@@ -128,7 +128,7 @@ _Noreturn void MainLoop()
 
         // update line scroll
         VDP_setHorizontalScrollTile(BG_B, 0, cloudScroll, CLOUD_SCROLL_NUM_TILES, DMA_QUEUE);
-        VDP_setHorizontalScrollTile(BG_A, 1, titleScroll, TITLE_SCROLL_NUM_TILES, DMA_QUEUE);
+        VDP_setHorizontalScrollTile(BG_A, 2, titleScroll, TITLE_SCROLL_NUM_TILES, DMA_QUEUE);
 
         SYS_doVBlankProcess();      // Wait for VBlank processes
     }
