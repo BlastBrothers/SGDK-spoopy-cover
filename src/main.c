@@ -19,7 +19,7 @@ s16 bg_xpos = 0;
 s16 cloudScroll[CLOUD_SCROLL_NUM_TILES]; //holds per-tile hscroll values for BG clouds
 //Only push right, so the wavy building on plane A doesn't pop in front of the static building on the window layer
 //This would be un-noticeable, but the gap between the title and the building is only 8px, so either part of the title gets cut off, or part of the building scrolls.
-const s16 titleScrollInitial[8] = {0, 0, 0, 1, 2, 2, 2, 1}; 
+const s16 titleScrollInitial[7] = {0, 0, 0, 1, 2, 2, 1}; 
 s16 titleScroll[TITLE_SCROLL_NUM_TILES] = {}; //holds per-tile hscroll values for FG title
 
 
@@ -121,8 +121,8 @@ _Noreturn void MainLoop()
             titleScroll[4] = titleScroll[5];
             titleScroll[5] = titleScroll[6];
             titleScroll[6] = titleScroll[7];
-            titleScroll[7] = titleScroll[8];
-            titleScroll[8] = temp;
+            titleScroll[7] = temp;
+            titleScroll[8] = titleScroll[0];
         }
         
 
