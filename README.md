@@ -6,7 +6,26 @@ ROM found in /out folder, as rom.bin
 
 Made using SGDK
 
----
+## Tools used
+aseprite
+
+Tiled
+
+SGDK
+
+vscode
+
+Mega Everdrive X5
+
+Model 1 Genesis
+
+USB capture card I got at a flea market for $1
+
+OBS
+
+kdenlive
+
+ezgif 
 
 Emulator shot:
 
